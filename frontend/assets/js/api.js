@@ -3,16 +3,16 @@
  * Central fetch wrapper with JWT auth, error handling, and toast notifications.
  */
 
-const API_BASE = "http://localhost:5001/api";
+const API_BASE = "https://doesmart-backend.onrender.com/api";
 
 // ── Token management ──────────────────────────────────────────────────────────
 const Auth = {
   getToken: () => localStorage.getItem("dm_token"),
   setToken: (t) => localStorage.setItem("dm_token", t),
-  getRole:  () => localStorage.getItem("dm_role"),
-  setRole:  (r) => localStorage.setItem("dm_role", r),
-  getUser:  () => JSON.parse(localStorage.getItem("dm_user") || "null"),
-  setUser:  (u) => localStorage.setItem("dm_user", JSON.stringify(u)),
+  getRole: () => localStorage.getItem("dm_role"),
+  setRole: (r) => localStorage.setItem("dm_role", r),
+  getUser: () => JSON.parse(localStorage.getItem("dm_user") || "null"),
+  setUser: (u) => localStorage.setItem("dm_user", JSON.stringify(u)),
   clear: () => {
     localStorage.removeItem("dm_token");
     localStorage.removeItem("dm_role");
@@ -75,7 +75,7 @@ class ApiError extends Error {
   constructor(message, status, data = {}) {
     super(message);
     this.status = status;
-    this.data   = data;
+    this.data = data;
   }
 }
 
@@ -83,43 +83,43 @@ class ApiError extends Error {
 const api = {
   // Auth
   auth: {
-    login:              (body)          => apiFetch("/auth/login",                  { method: "POST", body }),
-    registerCustomer:   (formData)      => apiFetch("/auth/register/customer",      { method: "POST", body: formData }),
-    registerShopkeeper: (formData)      => apiFetch("/auth/register/shopkeeper",    { method: "POST", body: formData }),
-    me:                 ()              => apiFetch("/auth/me"),
+    login: (body) => apiFetch("/auth/login", { method: "POST", body }),
+    registerCustomer: (formData) => apiFetch("/auth/register/customer", { method: "POST", body: formData }),
+    registerShopkeeper: (formData) => apiFetch("/auth/register/shopkeeper", { method: "POST", body: formData }),
+    me: () => apiFetch("/auth/me"),
   },
 
   // Admin
   admin: {
-    stats:        ()          => apiFetch("/admin/stats"),
-    pendingUsers: ()          => apiFetch("/admin/pending-users"),
-    approveUser:  (id, status)=> apiFetch(`/admin/approve-user/${id}`,  { method: "PUT", body: { status } }),
-    pendingShops: ()          => apiFetch("/admin/pending-shops"),
-    approveShop:  (id, status)=> apiFetch(`/admin/approve-shop/${id}`,  { method: "PUT", body: { status } }),
-    allUsers:     ()          => apiFetch("/admin/users"),
-    allShops:     ()          => apiFetch("/admin/shops"),
-    allOrders:    ()          => apiFetch("/admin/orders"),
-    directory:    (city="")   => apiFetch(`/admin/directory?city=${encodeURIComponent(city)}`),
+    stats: () => apiFetch("/admin/stats"),
+    pendingUsers: () => apiFetch("/admin/pending-users"),
+    approveUser: (id, status) => apiFetch(`/admin/approve-user/${id}`, { method: "PUT", body: { status } }),
+    pendingShops: () => apiFetch("/admin/pending-shops"),
+    approveShop: (id, status) => apiFetch(`/admin/approve-shop/${id}`, { method: "PUT", body: { status } }),
+    allUsers: () => apiFetch("/admin/users"),
+    allShops: () => apiFetch("/admin/shops"),
+    allOrders: () => apiFetch("/admin/orders"),
+    directory: (city = "") => apiFetch(`/admin/directory?city=${encodeURIComponent(city)}`),
   },
 
   // Shopkeeper
   shop: {
-    dashboard:     ()              => apiFetch("/shop/dashboard"),
-    listProducts:  ()              => apiFetch("/shop/products"),
-    addProduct:    (formData)      => apiFetch("/shop/products",         { method: "POST",   body: formData }),
-    updateProduct: (id, formData)  => apiFetch(`/shop/products/${id}`,   { method: "PUT",    body: formData }),
-    deleteProduct: (id)            => apiFetch(`/shop/products/${id}`,   { method: "DELETE" }),
-    orders:        ()              => apiFetch("/shop/orders"),
-    updateOrder:   (id, status)    => apiFetch(`/shop/orders/${id}`,     { method: "PUT", body: { status } }),
+    dashboard: () => apiFetch("/shop/dashboard"),
+    listProducts: () => apiFetch("/shop/products"),
+    addProduct: (formData) => apiFetch("/shop/products", { method: "POST", body: formData }),
+    updateProduct: (id, formData) => apiFetch(`/shop/products/${id}`, { method: "PUT", body: formData }),
+    deleteProduct: (id) => apiFetch(`/shop/products/${id}`, { method: "DELETE" }),
+    orders: () => apiFetch("/shop/orders"),
+    updateOrder: (id, status) => apiFetch(`/shop/orders/${id}`, { method: "PUT", body: { status } }),
   },
 
   // Customer
   customer: {
-    shops:      (params = {}) => apiFetch(`/shops?${new URLSearchParams(params)}`),
-    shopDetail: (id)          => apiFetch(`/shops/${id}`),
-    placeOrder: (body)        => apiFetch("/orders",                     { method: "POST", body }),
-    myOrders:   ()            => apiFetch("/orders"),
-    review:     (body)        => apiFetch("/reviews",                    { method: "POST", body }),
+    shops: (params = {}) => apiFetch(`/shops?${new URLSearchParams(params)}`),
+    shopDetail: (id) => apiFetch(`/shops/${id}`),
+    placeOrder: (body) => apiFetch("/orders", { method: "POST", body }),
+    myOrders: () => apiFetch("/orders"),
+    review: (body) => apiFetch("/reviews", { method: "POST", body }),
   },
 };
 
@@ -152,8 +152,8 @@ const Toast = (() => {
 
   return {
     success: (msg, d) => show(msg, "success", d),
-    error:   (msg, d) => show(msg, "error",   d),
-    info:    (msg, d) => show(msg, "info",    d),
+    error: (msg, d) => show(msg, "error", d),
+    info: (msg, d) => show(msg, "info", d),
   };
 })();
 
@@ -172,18 +172,18 @@ function formatDate(dateStr) {
 
 function statusBadge(status) {
   const map = {
-    pending:          "badge-amber",
-    approved:         "badge-emerald",
-    rejected:         "badge-rose",
-    confirmed:        "badge-indigo",
-    processing:       "badge-indigo",
+    pending: "badge-amber",
+    approved: "badge-emerald",
+    rejected: "badge-rose",
+    confirmed: "badge-indigo",
+    processing: "badge-indigo",
     out_for_delivery: "badge-amber",
-    delivered:        "badge-emerald",
-    cancelled:        "badge-rose",
-    spot:             "badge-indigo",
-    advance:          "badge-amber",
+    delivered: "badge-emerald",
+    cancelled: "badge-rose",
+    spot: "badge-indigo",
+    advance: "badge-amber",
   };
-  return `<span class="badge ${map[status] || 'badge-muted'}">${status.replace(/_/g," ")}</span>`;
+  return `<span class="badge ${map[status] || 'badge-muted'}">${status.replace(/_/g, " ")}</span>`;
 }
 
 function starsHtml(rating) {
@@ -195,11 +195,11 @@ function starsHtml(rating) {
 
 function uploadUrl(filename) {
   if (!filename) return null;
-  return `http://localhost:5001/uploads/${filename}`;
+  return `https://doesmart-backend.onrender.com/uploads/${filename}`;
 }
 
 function avatarInitials(name) {
-  return (name || "?").split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
+  return (name || "?").split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
 }
 
 // ── DOM helpers ───────────────────────────────────────────────────────────────
