@@ -1,0 +1,28 @@
+# Virtual environments
+backend/venv/
+backend/ENV/
+backend/env/
+.venv/
+env/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database and configuration
+.env
+backend/.env
+
+# IDE / Editor configuration
+.vscode/
+.idea/
+.DS_Store
+*.log
+
+# Temporary uploads / media
+backend/uploads/*
+!backend/uploads/.gitkeep

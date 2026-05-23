@@ -1,0 +1,3 @@
+# Pyrefly configuration at project root
+python-interpreter-path = "backend/venv/bin/python3.14"
+site-package-path = ["backend/venv/lib/python3.14/site-packages"]

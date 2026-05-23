@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DoEmart — Your Local Business Discovery Platform</title>
+  <meta name="description"
+    content="DoEmart connects you directly with local shopkeepers near you. Browse, order, and support small businesses in your community.">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    /* Landing-page specific styles */
+    body {
+      overflow-x: hidden;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) var(--space-8);
+      background: rgba(5, 9, 23, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      transition: all var(--transition-normal);
+    }
+
+    .navbar.scrolled {
+      padding: var(--space-3) var(--space-8);
+    }
+
+    .nav-logo {
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--indigo-400), var(--amber-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-cta {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: var(--space-20) var(--space-8);
+      padding-top: calc(var(--space-20) + 80px);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%,
+          rgba(99, 102, 241, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%,
+          rgba(245, 158, 11, 0.12) 0%, transparent 50%);
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 720px;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-full);
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--indigo-400);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-6);
+      animation: slideUp 0.6s ease forwards;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: var(--space-6);
+      animation: slideUp 0.6s 0.1s ease both;
+    }
+
+    .hero p {
+      font-size: var(--font-size-lg);
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin-bottom: var(--space-8);
+      animation: slideUp 0.6s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      animation: slideUp 0.6s 0.3s ease both;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: var(--space-8);
+      margin-top: var(--space-12);
+      animation: slideUp 0.6s 0.4s ease both;
+    }
+
+    .hero-stat-value {
+      font-size: var(--font-size-3xl);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--indigo-400), var(--amber-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-stat-label {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Floating cards */
+    .hero-visual {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42%;
+      padding-right: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      animation: fadeIn 1s 0.5s ease both;
+    }
+
+    .floating-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .floating-card:nth-child(2) {
+      margin-left: var(--space-8);
+    }
+
+    /* ── Features ── */
+    .features {
+      padding: var(--space-20) var(--space-8);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius-full);
+      padding: var(--space-1) var(--space-4);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--indigo-400);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-4);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-12);
+    }
+
+    .feature-card {
+      padding: var(--space-8);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--feature-color, var(--indigo-500)), transparent);
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: var(--space-5);
+      background: var(--feature-icon-bg, rgba(99, 102, 241, 0.1));
+    }
+
+    .feature-card h3 {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-3);
+    }
+
+    /* ── How It Works ── */
+    .how-it-works {
+      padding: var(--space-20) var(--space-8);
+      background: var(--navy-950);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-12);
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 12%;
+      right: 12%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--indigo-500), var(--amber-500), transparent);
+      z-index: 0;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-num {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--indigo-600), var(--indigo-500));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      color: #fff;
+      margin: 0 auto var(--space-5);
+      box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.1);
+    }
+
+    .step h4 {
+      margin-bottom: var(--space-2);
+    }
+
+    /* ── Roles Section ── */
+    .roles-section {
+      padding: var(--space-20) var(--space-8);
+    }
+
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-12);
+    }
+
+    .role-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      text-align: center;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+
+    .role-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-glow-indigo);
+      border-color: var(--indigo-500);
+    }
+
+    .role-icon-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-xl);
+      margin: 0 auto var(--space-5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      background: linear-gradient(135deg, var(--role-from, rgba(99, 102, 241, 0.15)), var(--role-to, rgba(99, 102, 241, 0.05)));
+      border: 1px solid var(--role-border, rgba(99, 102, 241, 0.2));
+    }
+
+    .role-card h3 {
+      font-size: var(--font-size-2xl);
+      margin-bottom: var(--space-3);
+    }
+
+    .role-features {
+      margin: var(--space-5) 0;
+      text-align: left;
+    }
+
+    .role-feature {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-2) 0;
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .role-feature:last-child {
+      border-bottom: none;
+    }
+
+    .role-feature-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--indigo-500);
+      flex-shrink: 0;
+    }
+
+    /* ── CTA Banner ── */
+    .cta-banner {
+      margin: 0 var(--space-8) var(--space-20);
+      padding: var(--space-16);
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(245, 158, 11, 0.1));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius-xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.15), transparent 70%);
+    }
+
+    .cta-banner>* {
+      position: relative;
+    }
+
+    .cta-banner h2 {
+      font-size: var(--font-size-4xl);
+      margin-bottom: var(--space-4);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy-950);
+      border-top: 1px solid var(--glass-border);
+      padding: var(--space-8);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .footer-logo {
+      font-size: var(--font-size-2xl);
+      font-weight: 900;
+      margin-bottom: var(--space-3);
+    }
+
+    @media (max-width: 1024px) {
+      .hero-visual {
+        display: none;
+      }
+
+      .features-grid,
+      .roles-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .steps-grid::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      .features-grid,
+      .roles-grid,
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero-stats {
+        flex-wrap: wrap;
+        gap: var(--space-4);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">DoEmart</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#portals">Portals</a>
+    </div>
+    <div class="nav-cta">
+      <a href="pages/login.html" class="btn btn-ghost btn-sm">Sign In</a>
+      <a href="pages/register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-chip">🏪 Local First Commerce Platform</div>
+      <h1>
+        Shop <span class="gradient-text">Local.</span><br>
+        Discover <span class="gradient-text">More.</span>
+      </h1>
+      <p>
+        DoEmart connects you directly with small-scale shopkeepers and local businesses
+        in your community — eliminating middlemen for better prices, fresher products,
+        and a stronger local economy.
+      </p>
+      <div class="hero-actions">
+        <a href="pages/register.html?role=customer" class="btn btn-primary btn-lg">
+          🛒 Start Shopping
+        </a>
+        <a href="pages/register.html?role=shopkeeper" class="btn btn-amber btn-lg">
+          🏪 List Your Shop
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value">100%</div>
+          <div class="hero-stat-label">Local</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">0</div>
+          <div class="hero-stat-label">Middlemen</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">Fast</div>
+          <div class="hero-stat-label">Same-Day Delivery</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating decorative cards -->
+    <div class="hero-visual">
+      <div class="floating-card animate-slide-up stagger-2">
+        <div class="flex items-center gap-3 mb-3">
+          <div
+            style="width:40px;height:40px;border-radius:10px;background:rgba(99,102,241,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;">
+            🛒</div>
+          <div>
+            <div class="fw-600 text-sm">Order Placed!</div>
+            <div class="text-xs text-muted">Arjun's Grocery</div>
+          </div>
+          <span class="badge badge-emerald ml-auto" style="margin-left:auto">Confirmed</span>
+        </div>
+        <div class="flex justify-between text-sm text-secondary">
+          <span>3 items · ₹342</span><span>Spot billing</span>
+        </div>
+      </div>
+
+      <div class="floating-card animate-slide-up stagger-3">
+        <div class="flex items-center gap-3">
+          <div
+            style="width:40px;height:40px;border-radius:10px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;">
+            ⭐</div>
+          <div>
+            <div class="fw-600 text-sm">New Review</div>
+            <div class="stars">★★★★★</div>
+          </div>
+          <div class="text-xs text-muted" style="margin-left:auto">"Fresh vegetables, great prices!"</div>
+        </div>
+      </div>
+
+      <div class="floating-card animate-slide-up stagger-4">
+        <div class="flex items-center gap-3 mb-3">
+          <div style="font-size:24px;">📍</div>
+          <div>
+            <div class="fw-600 text-sm">12 shops near you</div>
+            <div class="text-xs text-muted">Chennai, Tamil Nadu</div>
+          </div>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <span class="badge badge-indigo">Grocery</span>
+          <span class="badge badge-amber">Clothing</span>
+          <span class="badge badge-emerald">Pharmacy</span>
+          <span class="badge badge-muted">+9 more</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ── -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-label">✦ Why DoEmart</div>
+        <h2>Everything you need to <br><span class="gradient-text">shop local smarter</span></h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card animate-slide-up"
+          style="--feature-color:var(--indigo-500);--feature-icon-bg:rgba(99,102,241,0.1);">
+          <div class="feature-icon">🔒</div>
+          <h3>Verified Accounts</h3>
+          <p>Every buyer and seller is ID-verified by our admin team, ensuring a trustworthy community of traders.</p>
+        </div>
+        <div class="feature-card animate-slide-up stagger-1"
+          style="--feature-color:var(--amber-500);--feature-icon-bg:rgba(245,158,11,0.1);">
+          <div class="feature-icon">⚡</div>
+          <h3>Same-Day Processing</h3>
+          <p>Spot billing orders are processed instantly. Advance orders get priority scheduling — zero waiting.</p>
+        </div>
+        <div class="feature-card animate-slide-up stagger-2"
+          style="--feature-color:var(--emerald-500);--feature-icon-bg:rgba(16,185,129,0.1);">
+          <div class="feature-icon">📍</div>
+          <h3>Hyperlocal Discovery</h3>
+          <p>Filter shops by city and pincode to find exactly what you need — walking distance or across town.</p>
+        </div>
+        <div class="feature-card animate-slide-up stagger-3"
+          style="--feature-color:var(--sky-500);--feature-icon-bg:rgba(14,165,233,0.1);">
+          <div class="feature-icon">💬</div>
+          <h3>Direct Communication</h3>
+          <p>No intermediaries. Talk directly to the shopkeeper, customize orders, and negotiate freely.</p>
+        </div>
+        <div class="feature-card animate-slide-up stagger-4"
+          style="--feature-color:var(--rose-500);--feature-icon-bg:rgba(244,63,94,0.1);">
+          <div class="feature-icon">🏷️</div>
+          <h3>Exclusive Offers</h3>
+          <p>Shopkeepers list their own deals and discounts — you get real offers, not inflated "sale" prices.</p>
+        </div>
+        <div class="feature-card animate-slide-up"
+          style="--feature-color:var(--indigo-400);--feature-icon-bg:rgba(99,102,241,0.1);">
+          <div class="feature-icon">📊</div>
+          <h3>Business Directory</h3>
+          <p>A master directory of all approved local businesses — searchable, filterable, always up-to-date.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container text-center">
+      <div class="section-label">✦ Simple Steps</div>
+      <h2>Up and running <span class="gradient-text">in minutes</span></h2>
+      <div class="steps-grid">
+        <div class="step animate-scale-in">
+          <div class="step-num">1</div>
+          <h4>Register & Verify</h4>
+          <p class="text-sm text-muted">Sign up as a customer or shopkeeper. Upload your ID proof for admin
+            verification.</p>
+        </div>
+        <div class="step animate-scale-in stagger-1">
+          <div class="step-num">2</div>
+          <h4>Get Approved</h4>
+          <p class="text-sm text-muted">Our admin reviews your submission and activates your account — usually within 24
+            hrs.</p>
+        </div>
+        <div class="step animate-scale-in stagger-2">
+          <div class="step-num">3</div>
+          <h4>Explore & Order</h4>
+          <p class="text-sm text-muted">Browse verified local shops, add items to cart, and choose advance or spot
+            billing.</p>
+        </div>
+        <div class="step animate-scale-in stagger-3">
+          <div class="step-num">4</div>
+          <h4>Rate & Repeat</h4>
+          <p class="text-sm text-muted">Leave feedback to help others, discover new shops, and grow the local economy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Portals ── -->
+  <section class="roles-section" id="portals">
+    <div class="container text-center">
+      <div class="section-label">✦ Three Portals</div>
+      <h2>Built for everyone in the <span class="gradient-text">ecosystem</span></h2>
+      <div class="roles-grid">
+        <div class="role-card" onclick="window.location.href='pages/login.html?role=admin'">
+          <div class="role-icon-wrap"
+            style="--role-from:rgba(244,63,94,0.15);--role-to:rgba(244,63,94,0.05);--role-border:rgba(244,63,94,0.2);">
+            🛡️</div>
+          <h3>Admin</h3>
+          <p class="text-sm text-muted mb-4">Central authority controlling the entire platform.</p>
+          <div class="role-features">
+            <div class="role-feature">
+              <div class="role-feature-dot" style="background:var(--rose-400)"></div>Verify identities & approve
+              accounts
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot" style="background:var(--rose-400)"></div>Monitor all platform activity
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot" style="background:var(--rose-400)"></div>Manage business directory
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot" style="background:var(--rose-400)"></div>Oversee all orders & transactions
+            </div>
+          </div>
+          <a href="pages/login.html?role=admin" class="btn btn-rose btn-sm w-full">Admin Login</a>
+        </div>
+
+        <div class="role-card" onclick="window.location.href='pages/register.html?role=shopkeeper'">
+          <div class="role-icon-wrap"
+            style="--role-from:rgba(245,158,11,0.15);--role-to:rgba(245,158,11,0.05);--role-border:rgba(245,158,11,0.2);">
+            🏪</div>
+          <h3>Shopkeeper</h3>
+          <p class="text-sm text-muted mb-4">Retailers who manage their own digital storefronts.</p>
+          <div class="role-features">
+            <div class="role-feature">
+              <div class="role-feature-dot" style="background:var(--amber-400)"></div>List products with sizes &
+              quantities
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot" style="background:var(--amber-400)"></div>Create exclusive offers &
+              discounts
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot" style="background:var(--amber-400)"></div>Manage incoming orders
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot" style="background:var(--amber-400)"></div>Track revenue & analytics
+            </div>
+          </div>
+          <a href="pages/register.html?role=shopkeeper" class="btn btn-amber btn-sm w-full">Register Shop</a>
+        </div>
+
+        <div class="role-card" onclick="window.location.href='pages/register.html?role=customer'">
+          <div class="role-icon-wrap"
+            style="--role-from:rgba(99,102,241,0.15);--role-to:rgba(99,102,241,0.05);--role-border:rgba(99,102,241,0.2);">
+            🛒</div>
+          <h3>Customer</h3>
+          <p class="text-sm text-muted mb-4">Buyers who discover and order from local shops.</p>
+          <div class="role-features">
+            <div class="role-feature">
+              <div class="role-feature-dot"></div>Browse shops by location
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot"></div>Place advance or spot-billing orders
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot"></div>Track order status in real time
+            </div>
+            <div class="role-feature">
+              <div class="role-feature-dot"></div>Rate shops & leave feedback
+            </div>
+          </div>
+          <a href="pages/register.html?role=customer" class="btn btn-primary btn-sm w-full">Start Shopping</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA Banner ── -->
+  <div class="cta-banner">
+    <h2>Ready to <span class="gradient-text">go local?</span></h2>
+    <p class="text-secondary mb-6" style="font-size:var(--font-size-lg)">Join hundreds of local businesses and shoppers
+      already on DoEmart.</p>
+    <div class="flex justify-center gap-4 flex-wrap">
+      <a href="pages/register.html?role=customer" class="btn btn-primary btn-lg">Create Customer Account</a>
+      <a href="pages/register.html?role=shopkeeper" class="btn btn-amber btn-lg">Register Your Shop</a>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="footer-logo gradient-text">DoEmart</div>
+    <p>Bridging consumers and small-scale retailers — one local connection at a time.</p>
+    <p class="mt-4" style="font-size:var(--font-size-xs);">© 2024 DoEmart. Built for local communities.</p>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener("scroll", () => {
+      document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 20);
+    });
+
+    // Intersection Observer for animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.style.opacity = "1"; });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".animate-slide-up, .animate-scale-in, .animate-fade-in")
+      .forEach(el => observer.observe(el));
+  </script>
+</body>
+
+</html>

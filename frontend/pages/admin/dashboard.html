@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — DoEmart</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">DoEmart</div>
+    <div class="logo-sub">Admin Panel</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="active" id="nav-dashboard">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Dashboard
+    </a>
+    <a href="users.html" id="nav-users">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Manage Users
+    </a>
+    <a href="shops.html" id="nav-shops">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      Manage Shops
+    </a>
+    <a href="orders.html" id="nav-orders">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      All Orders
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="avatar" id="avatarInitial">A</div>
+      <div class="user-info">
+        <div class="user-name" id="userName">Admin</div>
+        <div class="user-role">Administrator</div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm w-full mt-4" id="logoutBtn" style="margin-top:var(--space-3)">Sign Out</button>
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<main class="main-content">
+  <div class="topbar animate-fade-in">
+    <div>
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Platform overview and quick actions</p>
+    </div>
+    <button class="btn btn-primary" onclick="loadAll()">⟳ Refresh</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="loading-overlay" style="grid-column:1/-1"><div class="spinner"></div></div>
+  </div>
+
+  <!-- Pending approvals (2 columns) -->
+  <div class="grid-2" style="margin-bottom:var(--space-8);">
+
+    <!-- Pending Customers -->
+    <div class="table-container animate-slide-up">
+      <div class="table-header">
+        <span class="table-title">⏳ Pending Customers</span>
+        <a href="users.html" class="btn btn-ghost btn-sm">View All</a>
+      </div>
+      <div id="pendingUsersTable"><div class="loading-overlay"><div class="spinner"></div></div></div>
+    </div>
+
+    <!-- Pending Shops -->
+    <div class="table-container animate-slide-up stagger-1">
+      <div class="table-header">
+        <span class="table-title">⏳ Pending Shops</span>
+        <a href="shops.html" class="btn btn-ghost btn-sm">View All</a>
+      </div>
+      <div id="pendingShopsTable"><div class="loading-overlay"><div class="spinner"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Recent Orders -->
+  <div class="table-container animate-slide-up stagger-2">
+    <div class="table-header">
+      <span class="table-title">📦 Recent Orders</span>
+      <a href="orders.html" class="btn btn-ghost btn-sm">View All</a>
+    </div>
+    <div id="recentOrdersTable"><div class="loading-overlay"><div class="spinner"></div></div></div>
+  </div>
+</main>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/admin.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!Auth.requireAuth("../../pages/login.html")) return;
+    if (!Auth.requireRole("admin", "../../pages/login.html")) return;
+    const user = Auth.getUser();
+    if (user) {
+      document.getElementById("userName").textContent = user.name;
+      document.getElementById("avatarInitial").textContent = avatarInitials(user.name);
+    }
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      Auth.clear(); window.location.href = "../../pages/login.html";
+    });
+    loadAll();
+  });
+
+  async function loadAll() {
+    await Promise.all([loadStats(), loadPendingUsers(), loadPendingShops(), loadRecentOrders()]);
+  }
+</script>
+</body>
+</html>

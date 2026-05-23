@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Shops — DoEmart Admin</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-text">DoEmart</div><div class="logo-sub">Admin Panel</div></div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="users.html">👥 Manage Users</a>
+    <a href="shops.html" class="active">🏪 Manage Shops</a>
+    <a href="orders.html">📦 All Orders</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user"><div class="avatar" id="avatarInitial">A</div><div class="user-info"><div class="user-name" id="userName">Admin</div><div class="user-role">Administrator</div></div></div>
+    <button class="btn btn-ghost btn-sm w-full" id="logoutBtn" style="margin-top:var(--space-3)">Sign Out</button>
+  </div>
+</aside>
+<main class="main-content">
+  <div class="topbar animate-fade-in">
+    <div><h1 class="page-title">Manage Shops</h1><p class="page-subtitle">Review and approve shopkeeper registrations</p></div>
+    <button class="btn btn-primary" onclick="loadAllShops()">⟳ Refresh</button>
+  </div>
+  <div class="table-container animate-slide-up">
+    <div class="table-header">
+      <span class="table-title">All Shops</span>
+    </div>
+    <div id="allShopsTable"><div class="loading-overlay"><div class="spinner"></div></div></div>
+  </div>
+</main>
+<div class="toast-container"></div>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/admin.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!Auth.requireAuth("../../pages/login.html")) return;
+    if (!Auth.requireRole("admin","../../pages/login.html")) return;
+    const user = Auth.getUser();
+    if (user) { document.getElementById("userName").textContent = user.name; document.getElementById("avatarInitial").textContent = avatarInitials(user.name); }
+    document.getElementById("logoutBtn").addEventListener("click", () => { Auth.clear(); window.location.href = "../../pages/login.html"; });
+    loadAllShops();
+  });
+</script>
+</body>
+</html>

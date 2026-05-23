@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopkeeper Dashboard — DoEmart</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-text">DoEmart</div><div class="logo-sub">My Shop</div></div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="active">🏠 Dashboard</a>
+    <a href="products.html">📦 My Products</a>
+    <a href="orders.html">🛒 Incoming Orders</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user"><div class="avatar" id="avatarInitial">S</div><div class="user-info"><div class="user-name" id="userName">Shopkeeper</div><div class="user-role">Shopkeeper</div></div></div>
+    <button class="btn btn-ghost btn-sm w-full" id="logoutBtn" style="margin-top:var(--space-3)">Sign Out</button>
+  </div>
+</aside>
+<main class="main-content">
+  <div class="topbar animate-fade-in">
+    <div>
+      <h1 class="page-title">My Dashboard</h1>
+      <p class="page-subtitle" id="shopSubtitle">Welcome to your shop manager</p>
+    </div>
+    <button class="btn btn-primary" onclick="loadDashboard()">⟳ Refresh</button>
+  </div>
+
+  <div class="stats-grid" id="statsGrid">
+    <div class="loading-overlay" style="grid-column:1/-1"><div class="spinner"></div></div>
+  </div>
+
+  <div class="table-container animate-slide-up mt-6" style="margin-top:var(--space-6)">
+    <div class="table-header">
+      <span class="table-title">🕐 Recent Orders</span>
+      <a href="orders.html" class="btn btn-ghost btn-sm">View All</a>
+    </div>
+    <div id="recentOrdersTable"><div class="loading-overlay"><div class="spinner"></div></div></div>
+  </div>
+</main>
+<div class="toast-container"></div>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/shopkeeper.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!Auth.requireAuth("../../pages/login.html")) return;
+    if (!Auth.requireRole("shopkeeper","../../pages/login.html")) return;
+    const user = Auth.getUser();
+    if (user) {
+      document.getElementById("userName").textContent = user.name;
+      document.getElementById("avatarInitial").textContent = avatarInitials(user.name);
+    }
+    document.getElementById("logoutBtn").addEventListener("click", () => { Auth.clear(); window.location.href = "../../pages/login.html"; });
+    loadDashboard();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — DoEmart</title>
+  <meta name="description" content="Create your DoEmart account as a customer or shopkeeper.">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <style>
+    .register-page { min-height: 100vh; padding: var(--space-8) var(--space-4); display: flex; flex-direction: column; align-items: center; }
+    .register-header { text-align: center; margin-bottom: var(--space-8); }
+    .register-header .logo { font-size: var(--font-size-2xl); font-weight: 900; }
+    .register-header h1 { font-size: var(--font-size-3xl); margin: var(--space-3) 0 var(--space-2); }
+
+    .role-chooser {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: var(--space-4); max-width: 640px; width: 100%;
+      margin-bottom: var(--space-8);
+    }
+    .chooser-card {
+      background: var(--glass-bg); border: 2px solid var(--glass-border);
+      border-radius: var(--radius-xl); padding: var(--space-6);
+      text-align: center; cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    .chooser-card:hover { border-color: var(--indigo-500); background: var(--glass-hover); transform: translateY(-2px); }
+    .chooser-card.active { border-color: var(--indigo-500); background: rgba(99,102,241,0.08); box-shadow: var(--shadow-glow-indigo); }
+    .chooser-icon { font-size: 40px; margin-bottom: var(--space-3); }
+    .chooser-card h3 { font-size: var(--font-size-xl); margin-bottom: var(--space-2); }
+    .chooser-card p { font-size: var(--font-size-sm); color: var(--text-muted); }
+
+    .register-form-wrap { width: 100%; max-width: 680px; }
+    .form-section { margin-bottom: var(--space-6); }
+    .form-section-title {
+      font-size: var(--font-size-sm); font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .form-stack { display: flex; flex-direction: column; gap: var(--space-4); }
+
+    .upload-trigger {
+      display: flex; align-items: center; gap: var(--space-4);
+      padding: var(--space-4); background: var(--glass-bg);
+      border: 1px dashed var(--glass-border); border-radius: var(--radius-md);
+      cursor: pointer; transition: all var(--transition-fast);
+    }
+    .upload-trigger:hover { border-color: var(--indigo-500); background: var(--glass-hover); }
+    .upload-trigger input[type="file"] { display: none; }
+    .upload-icon { font-size: 24px; }
+    .upload-info .name { font-size: var(--font-size-sm); font-weight: 600; }
+    .upload-info .hint { font-size: var(--font-size-xs); color: var(--text-muted); }
+
+    .auth-footer { text-align: center; margin-top: var(--space-6); font-size: var(--font-size-sm); color: var(--text-muted); }
+    .auth-footer a { color: var(--indigo-400); font-weight: 600; }
+
+    @media (max-width: 480px) {
+      .role-chooser { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="register-page">
+  <div class="register-header animate-slide-up">
+    <div class="logo gradient-text">DoEmart</div>
+    <h1>Create your account</h1>
+    <p class="text-muted">Join the local commerce revolution</p>
+  </div>
+
+  <!-- Role chooser -->
+  <div class="role-chooser animate-slide-up stagger-1">
+    <div class="chooser-card active" data-role="customer" id="choose-customer">
+      <div class="chooser-icon">🛒</div>
+      <h3>Customer</h3>
+      <p>Shop from local businesses near you</p>
+    </div>
+    <div class="chooser-card" data-role="shopkeeper" id="choose-shopkeeper">
+      <div class="chooser-icon">🏪</div>
+      <h3>Shopkeeper</h3>
+      <p>List your shop and reach more customers</p>
+    </div>
+  </div>
+
+  <!-- Forms -->
+  <div class="register-form-wrap animate-slide-up stagger-2">
+
+    <!-- Customer form -->
+    <form id="customerForm" class="card card-lg">
+      <div class="form-section">
+        <div class="form-section-title">👤 Personal Information</div>
+        <div class="form-stack">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="c_name">Full Name *</label>
+              <input class="form-input" type="text" id="c_name" name="name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="c_phone">Phone Number *</label>
+              <input class="form-input" type="tel" id="c_phone" name="phone" placeholder="+91 9876543210" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="c_email">Email Address *</label>
+            <input class="form-input" type="email" id="c_email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="c_password">Password *</label>
+              <input class="form-input" type="password" id="c_password" name="password" placeholder="Min 8 characters" required minlength="8">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="c_confirm">Confirm Password *</label>
+              <input class="form-input" type="password" id="c_confirm" name="confirm" placeholder="Repeat password" required>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">📍 Address</div>
+        <div class="form-stack">
+          <div class="form-group">
+            <label class="form-label" for="c_address">Street Address *</label>
+            <textarea class="form-textarea" id="c_address" name="address" rows="2" placeholder="Door no, Street, Area" required></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="c_city">City *</label>
+              <input class="form-input" type="text" id="c_city" name="city" placeholder="Chennai" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="c_pincode">Pincode *</label>
+              <input class="form-input" type="text" id="c_pincode" name="pincode" placeholder="600001" required maxlength="6">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">🪪 Identity Verification</div>
+        <div class="form-stack">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="c_id_type">ID Proof Type *</label>
+              <select class="form-select" id="c_id_type" name="id_proof_type" required>
+                <option value="Aadhaar">Aadhaar Card</option>
+                <option value="PAN">PAN Card</option>
+                <option value="Voter ID">Voter ID</option>
+                <option value="Passport">Passport</option>
+                <option value="Driving License">Driving License</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="c_id_num">ID Number *</label>
+              <input class="form-input" type="text" id="c_id_num" name="id_proof_number" placeholder="XXXX XXXX XXXX" required>
+            </div>
+          </div>
+          <label class="upload-trigger" for="c_id_doc">
+            <input type="file" id="c_id_doc" name="id_proof_doc" accept="image/*,.pdf" data-label="c_id_doc_label">
+            <span class="upload-icon">📄</span>
+            <div class="upload-info">
+              <div class="name" id="c_id_doc_label">Upload ID Proof Document</div>
+              <div class="hint">JPG, PNG or PDF · Max 10MB</div>
+            </div>
+          </label>
+          <label class="upload-trigger" for="c_addr_doc">
+            <input type="file" id="c_addr_doc" name="address_proof" accept="image/*,.pdf" data-label="c_addr_doc_label">
+            <span class="upload-icon">🏠</span>
+            <div class="upload-info">
+              <div class="name" id="c_addr_doc_label">Upload Address Proof Document</div>
+              <div class="hint">Utility bill, Aadhaar, Passport · Max 10MB</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full btn-lg" id="customerSubmitBtn">
+        Create Customer Account
+      </button>
+    </form>
+
+    <!-- Shopkeeper form -->
+    <form id="shopkeeperForm" class="card card-lg hidden">
+      <div class="form-section">
+        <div class="form-section-title">👤 Personal Information</div>
+        <div class="form-stack">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="s_name">Full Name *</label>
+              <input class="form-input" type="text" id="s_name" name="name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s_phone">Phone Number *</label>
+              <input class="form-input" type="tel" id="s_phone" name="phone" placeholder="+91 9876543210" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s_email">Email Address *</label>
+            <input class="form-input" type="email" id="s_email" name="email" placeholder="shop@example.com" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="s_password">Password *</label>
+              <input class="form-input" type="password" id="s_password" name="password" placeholder="Min 8 characters" required minlength="8">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s_confirm">Confirm Password *</label>
+              <input class="form-input" type="password" id="s_confirm" name="confirm" placeholder="Repeat password" required>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">🏪 Shop Details</div>
+        <div class="form-stack">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="s_shop_name">Shop Name *</label>
+              <input class="form-input" type="text" id="s_shop_name" name="shop_name" placeholder="Arjun's Grocery" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s_category">Category *</label>
+              <select class="form-select" id="s_category" name="shop_category">
+                <option value="Grocery">Grocery</option>
+                <option value="Clothing">Clothing & Apparel</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Pharmacy">Pharmacy</option>
+                <option value="Bakery">Bakery & Sweets</option>
+                <option value="Stationery">Stationery</option>
+                <option value="Hardware">Hardware & Tools</option>
+                <option value="Vegetables">Vegetables & Fruits</option>
+                <option value="Dairy">Dairy Products</option>
+                <option value="General">General Store</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s_desc">Shop Description</label>
+            <textarea class="form-textarea" id="s_desc" name="shop_description" placeholder="Tell customers what you sell, your specialties..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s_gst">GST Number (optional)</label>
+            <input class="form-input" type="text" id="s_gst" name="gst_number" placeholder="22AAAAA0000A1Z5">
+          </div>
+          <label class="upload-trigger" for="s_logo">
+            <input type="file" id="s_logo" name="shop_logo" accept="image/*" data-label="s_logo_label">
+            <span class="upload-icon">🖼️</span>
+            <div class="upload-info">
+              <div class="name" id="s_logo_label">Upload Shop Logo / Photo</div>
+              <div class="hint">JPG or PNG · Max 10MB</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">📍 Shop Address</div>
+        <div class="form-stack">
+          <div class="form-group">
+            <label class="form-label" for="s_address">Street Address *</label>
+            <textarea class="form-textarea" id="s_address" name="address" rows="2" placeholder="Shop no, Street, Area" required></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="s_city">City *</label>
+              <input class="form-input" type="text" id="s_city" name="city" placeholder="Chennai" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s_pincode">Pincode *</label>
+              <input class="form-input" type="text" id="s_pincode" name="pincode" placeholder="600001" required maxlength="6">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">🪪 Identity Verification</div>
+        <div class="form-stack">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="s_id_type">ID Proof Type</label>
+              <select class="form-select" id="s_id_type" name="id_proof_type">
+                <option value="Aadhaar">Aadhaar Card</option>
+                <option value="PAN">PAN Card</option>
+                <option value="Voter ID">Voter ID</option>
+                <option value="Passport">Passport</option>
+                <option value="Driving License">Driving License</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="s_id_num">ID Number</label>
+              <input class="form-input" type="text" id="s_id_num" name="id_proof_number" placeholder="XXXX XXXX XXXX">
+            </div>
+          </div>
+          <label class="upload-trigger" for="s_id_doc">
+            <input type="file" id="s_id_doc" name="id_proof_doc" accept="image/*,.pdf" data-label="s_id_doc_label">
+            <span class="upload-icon">📄</span>
+            <div class="upload-info">
+              <div class="name" id="s_id_doc_label">Upload ID Proof Document</div>
+              <div class="hint">JPG, PNG or PDF · Max 10MB</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-amber w-full btn-lg" id="shopkeeperSubmitBtn">
+        Register My Shop
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      Already have an account? <a href="login.html">Sign in →</a>
+    </p>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+</body>
+</html>

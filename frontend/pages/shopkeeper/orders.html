@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incoming Orders — DoEmart Shopkeeper</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-text">DoEmart</div><div class="logo-sub">My Shop</div></div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="products.html">📦 My Products</a>
+    <a href="orders.html" class="active">🛒 Incoming Orders</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user"><div class="avatar" id="avatarInitial">S</div><div class="user-info"><div class="user-name" id="userName">Shopkeeper</div><div class="user-role">Shopkeeper</div></div></div>
+    <button class="btn btn-ghost btn-sm w-full" id="logoutBtn" style="margin-top:var(--space-3)">Sign Out</button>
+  </div>
+</aside>
+<main class="main-content">
+  <div class="topbar animate-fade-in">
+    <div><h1 class="page-title">Incoming Orders</h1><p class="page-subtitle">Manage and fulfill customer orders</p></div>
+    <button class="btn btn-primary" onclick="loadShopOrders()">⟳ Refresh</button>
+  </div>
+  <div class="table-container animate-slide-up">
+    <div class="table-header"><span class="table-title">All Orders</span></div>
+    <div id="shopOrdersTable"><div class="loading-overlay"><div class="spinner"></div></div></div>
+  </div>
+</main>
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay" id="orderDetailModal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <h3 class="modal-title">Order Details</h3>
+      <button class="modal-close" data-modal-close>×</button>
+    </div>
+    <div id="orderDetailContent"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" data-modal-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/shopkeeper.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!Auth.requireAuth("../../pages/login.html")) return;
+    if (!Auth.requireRole("shopkeeper","../../pages/login.html")) return;
+    const user = Auth.getUser();
+    if (user) { document.getElementById("userName").textContent = user.name; document.getElementById("avatarInitial").textContent = avatarInitials(user.name); }
+    document.getElementById("logoutBtn").addEventListener("click", () => { Auth.clear(); window.location.href = "../../pages/login.html"; });
+    loadShopOrders();
+  });
+</script>
+</body>
+</html>

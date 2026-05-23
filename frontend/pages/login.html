@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — DoEmart</title>
+  <meta name="description" content="Sign in to DoEmart as a customer, shopkeeper, or admin.">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <style>
+    body { display: flex; min-height: 100vh; align-items: stretch; }
+
+    .auth-split {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 100vh; width: 100%;
+    }
+
+    /* Left panel */
+    .auth-panel-left {
+      background: linear-gradient(160deg, var(--navy-950) 0%, #0d1a3a 100%);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: var(--space-12);
+      position: relative; overflow: hidden;
+    }
+    .auth-panel-left::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 30% 40%, rgba(99,102,241,0.2), transparent);
+    }
+    .auth-panel-left > * { position: relative; }
+    .auth-brand { font-size: 3rem; font-weight: 900; margin-bottom: var(--space-4); }
+    .auth-tagline { font-size: var(--font-size-lg); color: var(--text-secondary); max-width: 340px; text-align: center; line-height: 1.7; }
+    .auth-illustration { font-size: 100px; margin-bottom: var(--space-6); }
+    .auth-chips { display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; margin-top: var(--space-6); }
+    .auth-chip {
+      padding: var(--space-2) var(--space-4);
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-xs); color: var(--text-secondary);
+    }
+
+    /* Right panel */
+    .auth-panel-right {
+      display: flex; align-items: center; justify-content: center;
+      padding: var(--space-8);
+      background: var(--navy-900);
+    }
+    .auth-box { width: 100%; max-width: 440px; }
+    .auth-box h1 { font-size: var(--font-size-3xl); margin-bottom: var(--space-2); }
+    .auth-box .subtitle { color: var(--text-muted); margin-bottom: var(--space-8); }
+
+    /* Role selector */
+    .role-tabs {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-2); margin-bottom: var(--space-6);
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg); padding: var(--space-1);
+    }
+    .role-tab {
+      padding: var(--space-3); border-radius: var(--radius-md);
+      text-align: center; cursor: pointer;
+      font-size: var(--font-size-sm); font-weight: 600;
+      color: var(--text-muted); transition: all var(--transition-fast);
+      border: 2px solid transparent;
+    }
+    .role-tab:hover { color: var(--text-primary); background: var(--glass-hover); }
+    .role-tab.active {
+      background: linear-gradient(135deg, var(--indigo-600), var(--indigo-500));
+      color: #fff; border-color: transparent;
+      box-shadow: 0 4px 15px rgba(99,102,241,0.35);
+    }
+    .role-tab .role-emoji { font-size: 20px; display: block; margin-bottom: 2px; }
+
+    .form-stack { display: flex; flex-direction: column; gap: var(--space-4); }
+
+    .auth-footer { text-align: center; margin-top: var(--space-6); font-size: var(--font-size-sm); color: var(--text-muted); }
+    .auth-footer a { color: var(--indigo-400); font-weight: 600; }
+    .auth-footer a:hover { color: var(--indigo-300); }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      color: var(--text-muted); font-size: var(--font-size-sm); margin-bottom: var(--space-8);
+      transition: color var(--transition-fast);
+    }
+    .back-link:hover { color: var(--text-primary); }
+
+    @media (max-width: 768px) {
+      .auth-split { grid-template-columns: 1fr; }
+      .auth-panel-left { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="auth-split">
+  <!-- Left decorative panel -->
+  <div class="auth-panel-left">
+    <div class="auth-illustration">🏪</div>
+    <div class="auth-brand gradient-text">DoEmart</div>
+    <p class="auth-tagline">Your gateway to local commerce — verified, direct, and community-powered.</p>
+    <div class="auth-chips">
+      <span class="auth-chip">✓ Verified Sellers</span>
+      <span class="auth-chip">✓ Same-Day Orders</span>
+      <span class="auth-chip">✓ Local Discovery</span>
+      <span class="auth-chip">✓ No Middlemen</span>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="auth-panel-right">
+    <div class="auth-box animate-slide-up">
+      <a href="../index.html" class="back-link">← Back to Home</a>
+      <h1>Welcome back</h1>
+      <p class="subtitle">Sign in to your DoEmart account</p>
+
+      <!-- Role tabs -->
+      <div class="role-tabs">
+        <div class="role-tab active" data-role="customer" id="tab-customer">
+          <span class="role-emoji">🛒</span>Customer
+        </div>
+        <div class="role-tab" data-role="shopkeeper" id="tab-shopkeeper">
+          <span class="role-emoji">🏪</span>Shopkeeper
+        </div>
+        <div class="role-tab" data-role="admin" id="tab-admin">
+          <span class="role-emoji">🛡️</span>Admin
+        </div>
+      </div>
+
+      <form id="loginForm" class="form-stack">
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input class="form-input" type="email" id="email" name="email"
+                 placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="relative">
+            <input class="form-input" type="password" id="password" name="password"
+                   placeholder="Enter your password" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full btn-lg" id="loginBtn">
+          Sign In
+        </button>
+      </form>
+
+      <p class="auth-footer">
+        Don't have an account? <a href="register.html">Create one →</a>
+      </p>
+
+      <!-- Admin notice -->
+      <div id="adminNotice" class="hidden" style="margin-top:var(--space-4);padding:var(--space-3) var(--space-4);background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:var(--radius-md);font-size:var(--font-size-xs);color:var(--rose-400);">
+        🔑 Default admin credentials:<br>Email: <strong>admin@doesmart.com</strong> · Password: <strong>Admin@123</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+</body>
+</html>
